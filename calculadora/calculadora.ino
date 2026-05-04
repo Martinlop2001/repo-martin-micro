@@ -1,6 +1,7 @@
 
 
 
+
 void setup() {
   Serial.begin(115200);
   Serial.println("Calculadora iniciada");
@@ -33,32 +34,39 @@ float calcular(float n1, float n2, char op) {
 void loop() {
   if (Serial.available() > 0) {
 
-    float n1 = Serial.parseFloat();
+    String linea = Serial.readStringUntil('\n');
+    linea.trim();
 
-    
-    while (Serial.available() == 0);
-
-    char op = Serial.read();
-
-    // Ignorar  espacios y saltos de línea
-    while (op == ' ' || op == '\n' || op == '\r') {
-      while (Serial.available() == 0);
-      op = Serial.read();
+    // Ignorar lineas vacias
+    if (linea.length() == 0) {
+      return;
     }
 
-    float n2 = Serial.parseFloat();
+    // Iniciar variables para evitar basura
+    float n1 = 0;
+    float n2 = 0;
+    char op = 0;
 
-    float resultado = calcular(n1, n2, op);
+    int campos = sscanf(linea.c_str(), "%f %c %f", &n1, &op, &n2);
 
-    // Validación final
-    if ((op == '+' || op == '-' || op == '*' || op == '/') && !(op == '/' && n2 == 0)) {
-      Serial.print("Resultado: ");
-      Serial.println(resultado);
+    // Validar que sscanf capturo los 3 elementos correctamente
+    if (campos != 3) {
+      Serial.print("Error: formato invalido -> '");
+      Serial.print(linea);
+      Serial.println("'  Ej: 10 * 2");
     }
+    else {
+        if (op != '+' && op != '-' && op != '*' && op != '/') {
+          Serial.println("Error: operador invalido");
+        }
+        else {
+        float resultado = calcular(n1, n2, op);
 
-  
-    while (Serial.available() > 0) {
-      Serial.read();
+        if (!(op == '/' && n2 == 0)) {
+          Serial.print("Resultado: ");
+          Serial.println(resultado);
+        }
+      }
     }
 
     Serial.println("Ingrese otra operacion:");
