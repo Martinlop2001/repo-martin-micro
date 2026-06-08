@@ -8,7 +8,7 @@ int intervalosBlink = 500;
 bool estadoLED = false;          
 
 void setup() {
-  delay (2000);
+  delay (4000);
   Serial.begin(115200);
   pinMode(8, OUTPUT);
   digitalWrite(8, LOW);
