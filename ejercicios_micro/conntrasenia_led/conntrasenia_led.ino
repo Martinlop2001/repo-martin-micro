@@ -4,7 +4,7 @@ const String CONTRASEÑA = "ites123";
 
 bool accesoPermitido = false;
 unsigned long ultimoBlink = 0; 
-int intervalosBlink = 500;       
+int intervalosBlink = 100;       
 bool estadoLED = false;          
 
 void setup() {
